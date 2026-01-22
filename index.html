@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>[링큐] 이메일 인증 코드</title>
+    <style>
+      :root{
+        --white:#fff;
+        --black:#000208;
+
+        --g05:#F7F7F7;
+        --g700:#5F6167;
+        --g600:#87898F;
+        --g02:#989898;
+
+        --b200:#2C6FFF;
+        --b100:#95B6FF;
+        --b50:#E5EDFF;
+
+        --line:#EFF4FB;
+        --grad: linear-gradient(90deg,#2C6FFF 0%,#C800FF 100%);
+      }
+
+      html,body{ margin:0; padding:0; background:#eef2f7; }
+      body{
+        font-family:"Paperlogy",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",
+          "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        color:var(--black);
+      }
+
+      .wrap{ width:100%; padding:24px 12px; box-sizing:border-box; }
+
+      .stage{
+        width:100%;
+        max-width:640px;     /* 전체 크기 조절 */
+        margin:0 auto;
+        position:relative;
+      }
+
+      .canvas{
+        width:2700px;
+        height:2790px;
+        border-radius:160px;
+        overflow:hidden;
+        background:var(--white);
+        box-shadow:0 10px 28px rgba(16,24,40,.10);
+        transform-origin: top left;
+        position:relative;
+      }
+
+      /* 히어로 영역 */
+      .hero{
+        position:absolute;
+        top:0;
+        left:0;
+        width:2700px;
+        height:520px;
+        background:var(--grad);
+      }
+
+      .hero-logo{
+        position:absolute;
+        top:131.5px;
+        left:160px;
+        width:200px;
+        height:142px;
+      }
+      .hero-logo svg{ width:100%; height:100%; display:block; }
+
+      .hero-tagline{
+        position:absolute;
+        top:319.5px;
+        left:143px;
+        color:var(--g05);
+        font-size:80px;
+        font-weight:600;
+        line-height:150%;
+        white-space:nowrap;
+      }
+
+      /* 바디 */
+      .headline{
+        position:absolute;
+        top:676px;
+        left:159px;
+        display:flex;
+        align-items:baseline;
+        gap:29px;
+        white-space:nowrap;
+      }
+
+      .headline .brand{
+        font-size:128px;
+        font-weight:700;
+        line-height:1.1;   /* 잘림 방지 */
+        background:var(--grad);
+        background-clip:text;
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        display:inline-block;
+        padding:6px 0;
+      }
+
+      .headline .title{
+        font-size:128px;
+        font-weight:700;
+        line-height:1.1;
+        color:var(--black);
+        display:inline-block;
+        padding:6px 0;
+      }
+
+      /* subline은 headline 아래 간격 84 */
+      .subline{
+        position:absolute;
+        top: calc(676px + 141px + 84px); /* headlineH 근사 */
+        left:159px;
+        color:var(--g700);
+        font-size:100px;
+        font-weight:500;
+        line-height:150%;
+        white-space:nowrap;
+      }
+
+      /* codebox는 subline 아래 간격 120 */
+      .codebox{
+        position:absolute;
+        top: calc(676px + 141px + 84px + 150px + 120px);
+        left:159px;
+        width:2380px;
+        height:760px;
+        border-radius:60px;
+        border:4px solid var(--b100);
+        background:var(--b50);
+        box-sizing:border-box;
+      }
+
+      .code{
+        position:absolute;
+        top:200px;
+        left:539px;
+        color:var(--b200);
+        font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",
+          "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        font-size:240px;
+        font-weight:600;
+        line-height:150%;
+        letter-spacing:80px;
+        white-space:nowrap;
+      }
+
+      /* divider + footer */
+      .divider{
+        position:absolute;
+        top:2400px;
+        left:40px;
+        width:2620px;
+        height:10px;
+        background:var(--line);
+      }
+
+      .footer{
+        position:absolute;
+        top: calc(2400px + 10px + 120px);
+        left:160px;
+        color:var(--g02);
+        font-size:90px;
+        font-weight:500;
+        line-height:150%;
+        white-space:nowrap;
+      }
+
+      /* footnote: JS가 “정확히 중앙”으로 top을 지정 */
+      .footnote{
+        position:absolute;
+        left:159px;
+        top: 0px;                /* JS에서 최종 결정 */
+        width:2380px;            /* 줄바꿈 안정 */
+        color:var(--g600);
+        font-size:90px;
+        font-weight:500;
+        line-height:150%;
+        white-space:pre-line;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="stage" id="stage">
+        <div class="canvas" id="canvas">
+          <!-- HERO -->
+          <div class="hero">
+            <div class="hero-logo" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="200" height="142" viewBox="0 0 200 142" fill="none">
+                <path d="M60.3523 24.3036C76.515 8.92268 100.952 9.24475 116.761 22.8205L81.5849 56.3987C67.4301 69.9104 64.348 91.367 74.126 108.326C76.5488 112.528 79.5532 116.132 82.9663 119.116L71.1151 130.395C51.367 149.188 19.2644 144.539 5.64253 120.914C-4.08587 104.041 -1.00261 82.6911 13.101 69.2695L60.3523 24.3036Z" fill="white"/>
+                <path d="M128.388 11.7232C148.251 -7.23774 180.6 -2.57832 194.322 21.22C204.1 38.1787 201.018 59.6353 186.863 73.147L140.061 117.822C123.704 133.435 98.8829 133.032 82.9663 119.116L118.366 85.4291C132.47 72.0075 135.553 50.6575 125.825 33.7848C123.352 29.4954 120.268 25.8321 116.761 22.8205L128.388 11.7232Z" fill="white"/>
+              </svg>
+            </div>
+            <div class="hero-tagline">Link U, Think You</div>
+          </div>
+
+          <!-- BODY CONTENT -->
+          <div class="headline">
+            <div class="brand">[링큐]</div>
+            <div class="title">이메일 인증 코드</div>
+          </div>
+
+          <div class="subline">아래의 일회용 코드로 인증을 진행해주세요. (유효시간 5분)</div>
+
+          <div class="codebox" id="codebox" role="group" aria-label="이메일 인증 코드">
+            <div class="code">485740</div>
+          </div>
+
+          <div class="footnote" id="footnote">
+본 메일을 요청하지 않으셨다면, 이 메일은 무시하셔도 됩니다.
+더 좋은 서비스를 위해 노력하는 링큐가 되겠습니다!
+          </div>
+
+          <div class="divider" id="divider" aria-hidden="true"></div>
+          <div class="footer">ⓒ 2025 | Link U</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const stage   = document.getElementById("stage");
+        const canvas  = document.getElementById("canvas");
+        const codebox = document.getElementById("codebox");
+        const divider = document.getElementById("divider");
+        const foot    = document.getElementById("footnote");
+
+        const BASE_W = 2700;
+        const BASE_H = 2790;
+
+        // “정중앙”에 위치해야댐: (코드박스 아래 120) ~ (라인 위 130) 구간의 중앙
+        const GAP_BELOW_CODEBOX = 120; // base px
+        const GAP_ABOVE_DIVIDER = 130; // base px
+
+        function layout() {
+          const w = stage.clientWidth;
+          const s = w / BASE_W;
+
+          // 1) 스케일
+          canvas.style.transform = `scale(${s})`;
+          stage.style.height = (BASE_H * s) + "px";
+
+          // 2) 실측 (스케일된 화면 좌표)
+          const canvasRect  = canvas.getBoundingClientRect();
+          const codeRect    = codebox.getBoundingClientRect();
+          const dividerRect = divider.getBoundingClientRect();
+          const footRect    = foot.getBoundingClientRect();
+
+          // 3) “여백 포함 중앙” 상/하 경계
+          const topBoundScaled    = codeRect.bottom + (GAP_BELOW_CODEBOX * s);
+          const bottomBoundScaled = dividerRect.top - (GAP_ABOVE_DIVIDER * s);
+
+          // 중앙 Y
+          const midYScaled = (topBoundScaled + bottomBoundScaled) / 2;
+
+          // footnote top (중앙 정렬)
+          const desiredTopScaled = midYScaled - (footRect.height / 2);
+
+          // base 좌표로 변환
+          let desiredTopBase = (desiredTopScaled - canvasRect.top) / s;
+
+          // 4) 겹침 방지
+          const topBoundBase    = (topBoundScaled - canvasRect.top) / s;
+          const bottomBoundBase = (bottomBoundScaled - canvasRect.top) / s;
+          const footHBase       = footRect.height / s;
+
+          const minTop = topBoundBase;
+          const maxTop = bottomBoundBase - footHBase;
+
+          // 혹시 영역이 너무 좁을 경우의 문제(폰트나 줄바꿈)도 처리햇슨
+          if (maxTop < minTop) {
+            // 영역이 좁으면: 위 경계에 맞추되, line과 겹치지 않게 최대한 올림
+            desiredTopBase = Math.max(0, bottomBoundBase - footHBase);
+          } else {
+            desiredTopBase = Math.max(minTop, Math.min(desiredTopBase, maxTop));
+          }
+
+          foot.style.top = desiredTopBase + "px";
+        }
+
+        window.addEventListener("resize", layout);
+
+        // 폰트 로딩/렌더 타이밍 보정
+        window.addEventListener("load", () => {
+          layout();
+          setTimeout(layout, 50);
+          setTimeout(layout, 250);
+          setTimeout(layout, 600);
+        });
+
+        layout();
+      })();
+    </script>
+  </body>
+</html>
