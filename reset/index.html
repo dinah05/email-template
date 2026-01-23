@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- 제목 -->
+    <title>[링큐] 비밀번호 재설정</title>
+
+    <style>
+      :root{
+        --grad: linear-gradient(90deg,#2C6FFF 0%,#C800FF 100%); /* 브랜드 그라데이션 */
+        --white:#fff;
+        --black:#000208;
+        --g05:#F7F7F7; 
+        --g700:#5F6167;
+        --g600:#87898F;
+        --g02:#989898;
+        --line:#EFF4FB;
+      }
+
+      /* 브라우저 기본 여백 제거 + 배경색 설정 */
+      html,body{ margin:0; padding:0; background:#eef2f7; }
+
+      /* 글꼴 설정: 페이퍼로지 있으면 사용, 없으면 시스템 폰트로 대체 */
+      body{
+        font-family:"Paperlogy",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",
+          "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        color:var(--black);
+      }
+
+      /* 메일 바깥쪽 패딩 */
+      .wrap{ width:100%; padding:24px 12px; box-sizing:border-box; }
+
+      /* 화면에 보이는 크기를 결정하는 프레임 */
+      .stage{ width:100%; max-width:640px; margin:0 auto; position:relative; }
+
+      /* 피그마 기준 2700 x 2790 레이아웃 그대로 구성, JS가 scale()로 줄여서 화면에 맞게 표시함 */
+      .canvas{
+        width:2700px;
+        height:2790px;
+        border-radius:160px;
+        overflow:hidden;
+        background:var(--white);
+        box-shadow:0 10px 28px rgba(16,24,40,.10);
+        transform-origin: top left;
+        position:relative;
+
+        --topSpacerWeight: 1;
+        --bottomSpacerWeight: 1;
+      }
+
+      /* 상단 그라데이션(히어로) 영역 */
+      .hero{
+        position:absolute; top:0; left:0;
+        width:2700px; height:520px;
+        background:var(--grad);
+      }
+
+      /* 상단 로고 */
+      .hero-logo{
+        position:absolute; top:131.5px; left:160px;
+        width:200px; height:142px;
+      }
+      .hero-logo svg{ width:100%; height:100%; display:block; }
+
+      /* 슬로건 */
+      .hero-tagline{
+        position:absolute; top:319.5px; left:143px;
+        color:var(--g05);
+        font-size:80px; font-weight:600; line-height:150%;
+        white-space:nowrap; /* 줄바꿈 방지 */
+      }
+
+      /* 헤드라인 */
+      .headline{
+        position:absolute; top:676px; left:160px;
+        display:flex; align-items:baseline; gap:29px;
+        white-space:nowrap;
+      }
+
+      /* [링큐] : 그라데이션 텍스트 */
+      .headline .brand{
+        font-size:128px; font-weight:700; line-height:1.1;
+        background:var(--grad);
+        -webkit-background-clip:text; background-clip:text;
+        -webkit-text-fill-color:transparent;
+        padding:6px 0;
+      }
+
+      /* 제목 텍스트 */
+      .headline .title{
+        font-size:128px; font-weight:700; line-height:1.1;
+        color:var(--black);
+        padding:6px 0;
+      }
+
+      /* 중앙 콘텐츠 */
+      .content{
+        position:absolute;
+        left:160px;
+        top:901px;
+        width:2380px;
+        height:1369px; /* 2270(=2400-130) - 901 */
+        display:flex;
+        flex-direction:column;
+      }
+
+      /* 첫 번째 문구 */
+      .desc-strong{
+        color:var(--g700);
+        font-size:100px;
+        font-weight:500;
+        line-height:150%;
+        white-space:nowrap;
+        margin:0;
+      }
+
+      /* 설명문구 */
+      .desc{
+        margin: 30px 0 0 0;
+        margin-top: 10px;
+
+        color: var(--g600);
+        font-size:90px;
+        font-weight:400;
+        line-height:150%;
+        white-space:normal;
+      }
+
+      /* “5분” 밑줄 처리 */
+      .underline{
+        text-decoration: underline;
+        text-decoration-thickness: 4px;
+        text-underline-offset: 8px;
+      }
+
+      /* 버튼 위/아래 공간 */
+      .spacer-top{ flex: var(--topSpacerWeight) 1 0; }
+
+      /* 비밀번호 재설정 CTA 버튼 */
+      .btn{
+        width:1800px;
+        height:350px;
+        align-self:center;
+        border-radius:80px;
+        background:var(--grad);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-decoration:none;
+        box-shadow:0 26px 60px rgba(0,0,0,.10);
+      }
+
+      /* 버튼 안 텍스트 */
+      .btn span{
+        color:var(--white);
+        font-size:100px;
+        font-weight:700;
+        line-height:20px;
+        white-space:nowrap;
+      }
+
+      .spacer-bottom{ flex: var(--bottomSpacerWeight) 1 0; }
+
+      /* 하단 안내 문구 */
+      .footnote{
+        color:var(--g600);
+        font-size:90px;
+        font-weight:500;
+        line-height:150%;
+        white-space:pre-line;
+        margin:0;
+      }
+
+      /* 하단 구분선 + 저작권 문구 */
+      .divider{
+        position:absolute; top:2400px; left:40px;
+        width:2620px; height:10px;
+        background:var(--line);
+      }
+      .footer{
+        position:absolute; top:2530px; left:160px;
+        color:var(--g02);
+        font-size:90px; font-weight:500; line-height:150%;
+        white-space:nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <!-- stage: 화면에 보이는 크기를 정하는 프레임 -->
+      <div class="stage" id="stage">
+        <!-- canvas: 피그마 원본 기준 구성 디자인 -->
+        <div class="canvas" id="canvas">
+
+          <!-- 상단 히어로 영역 -->
+          <div class="hero">
+            <div class="hero-logo" aria-hidden="true">
+              <!-- 링큐 로고 -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="200" height="142" viewBox="0 0 200 142" fill="none">
+                <path d="M60.3523 24.3036C76.515 8.92268 100.952 9.24475 116.761 22.8205L81.5849 56.3987C67.4301 69.9104 64.348 91.367 74.126 108.326C76.5488 112.528 79.5532 116.132 82.9663 119.116L71.1151 130.395C51.367 149.188 19.2644 144.539 5.64253 120.914C-4.08587 104.041 -1.00261 82.6911 13.101 69.2695L60.3523 24.3036Z" fill="white"/>
+                <path d="M128.388 11.7232C148.251 -7.23774 180.6 -2.57832 194.322 21.22C204.1 38.1787 201.018 59.6353 186.863 73.147L140.061 117.822C123.704 133.435 98.8829 133.032 82.9663 119.116L118.366 85.4291C132.47 72.0075 135.553 50.6575 125.825 33.7848C123.352 29.4954 120.268 25.8321 116.761 22.8205L128.388 11.7232Z" fill="white"/>
+              </svg>
+            </div>
+
+            <!-- 슬로건 -->
+            <div class="hero-tagline">Link U, Think You</div>
+          </div>
+
+          <!-- 본문 헤드라인 -->
+          <div class="headline">
+            <div class="brand">[링큐]</div>
+            <div class="title">비밀번호 재설정</div>
+          </div>
+
+          <!-- 중앙 컨텐츠 -->
+          <div class="content">
+            <!-- 상단 강조 문구 -->
+            <div class="desc-strong">링큐 회원님의 계정 비밀번호를 재설정하실 수 있습니다.</div>
+
+            <!-- 설명 문구 -->
+            <div class="desc">
+              아래 버튼을 눌러 새로운 비밀번호를 설정해주세요.<br/>
+              보안을 위해 이 링크는 <span class="underline">5분</span> 동안만 유효합니다.
+            </div>
+
+            <div class="spacer-top"></div>
+
+            <!-- 메인 CTA 버튼, TODO: 추후 수정 바랍니닷 -->
+            <a class="btn" href="https://example.com/reset" target="_blank" rel="noopener noreferrer">
+              <span>비밀번호 재설정하기</span>
+            </a>
+
+            <div class="spacer-bottom"></div>
+
+            <!-- 하단 안내 문구 -->
+            <div class="footnote">
+본 메일을 요청하지 않으셨다면, 이 메일은 무시하셔도 됩니다.
+더 좋은 서비스를 위해 노력하는 링큐가 되겠습니다!
+            </div>
+          </div>
+
+          <!-- 구분선 -->
+          <div class="divider" aria-hidden="true"></div>
+
+          <!-- 저작권 -->
+          <div class="footer">ⓒ 2025 | Link U</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const stage = document.getElementById("stage");
+        const canvas = document.getElementById("canvas");
+
+        /* 피그마 원본 크기 */
+        const BASE_W = 2700;
+        const BASE_H = 2790;
+
+        function layout() {
+          const w = stage.clientWidth;
+          const s = w / BASE_W;
+
+          canvas.style.transform = `scale(${s})`;
+
+          stage.style.height = (BASE_H * s) + "px";
+        }
+
+        window.addEventListener("resize", layout);
+
+        /* 로딩 직후 + 폰트 렌더 타이밍 보정 */
+        window.addEventListener("load", () => {
+          layout();
+          setTimeout(layout, 50);
+          setTimeout(layout, 250);
+        });
+
+        /* 최초 1회 실행 */
+        layout();
+      })();
+    </script>
+  </body>
+</html>
