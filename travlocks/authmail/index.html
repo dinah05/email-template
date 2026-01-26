@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>[트래블록스] 이메일 인증 코드 안내</title>
+
+    <style>
+      :root{
+        --primary:#3C4EF4;
+        --base0:#222;
+        --base1:#4A5569;
+        --border:#D9D9D9;
+        --white:#FFF;
+        --codeBg: rgba(60, 78, 244, 0.10);
+        --gray02:#989898;
+      }
+
+      html,body{ margin:0; padding:0; background:#eef2f7; }
+      body{
+        font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",
+          "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        color:var(--base0);
+      }
+
+      /* 보이는 크기 프레임 */
+      .wrap{ width:100%; padding:24px 12px; box-sizing:border-box; }
+      .stage{ width:100%; max-width:640px; margin:0 auto; position:relative; }
+
+      /* 피그마 원본 캔버스(580x559) */
+      .canvas{
+        width:580px;
+        height:559px;
+        border-radius:30px;
+        border:1px solid var(--border);
+        background:var(--white);
+        overflow:hidden;
+        box-shadow:0 10px 28px rgba(16,24,40,.10);
+        transform-origin: top left;
+        position:relative;
+
+        /* ===============================
+           여기 2개 간격조정
+           - codeboxTop: 서브문구와 코드박스 사이 간격
+           - codeboxH  : 코드박스 실제 높이(중앙정렬 계산용)
+        =============================== */
+        --codeboxTop: 270px; /* 기존보다 살짝 내려서 “서브문구-박스” 간격 확보 */
+        --codeboxH:   98px;  /* 24(상) + 50(글자) + 24(하) = 98 */
+        --bottomH:    72px;  /* 하단 구분 영역 높이 */
+      }
+
+      /* 로고: 상단 41, 좌우 110 (폭 360, 높이 86) */
+      .logo{
+        position:absolute;
+        top:41px;
+        left:110px;
+        width:360px;
+        height:86px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+      .logo img{
+        width:100%;
+        height:100%;
+        display:block;
+        object-fit:contain;
+      }
+
+      /* 타이틀 라인: 로고 아래 45, 좌측 40 */
+      .title-row{
+        position:absolute;
+        top:172px; /* 41 + 86 + 45 */
+        left:40px;
+        display:flex;
+        align-items:baseline;
+        gap:8px;
+        white-space:nowrap;
+      }
+      .title-row .brand{
+        color:var(--primary);
+        font-size:28px;
+        font-weight:600;
+        line-height:normal;
+      }
+      .title-row .title{
+        color:var(--base0);
+        font-size:28px;
+        font-weight:600;
+        line-height:normal;
+      }
+
+      /* [트래블록스] 라인과 “아래의 …” 시작점을 맞추기 위해: 좌측 정렬로 변경 */
+      .subtitle{
+        position:absolute;
+        top:210px;
+        left:40px;
+        right:40px;
+        text-align:left;
+        color:var(--base1);
+        font-size:20px;
+        font-weight:500;
+        line-height:normal;
+        white-space:nowrap;
+      }
+
+      /* 인증 코드 박스 */
+      .codebox{
+        position:absolute;
+        top:var(--codeboxTop);
+        left:50%;
+        transform:translateX(-50%);
+        width:500px;
+
+        padding:24px 105px;      /* 피그마 스펙 그대로 */
+        box-sizing:border-box;
+
+        border-radius:5px;
+        background:var(--codeBg);
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+      }
+
+      /* 6자리 코드(숫자끼리의 간격 20) */
+      .code{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:20px;
+        color:var(--primary);
+        font-size:50px;
+        font-weight:600;
+        line-height:normal;
+        white-space:nowrap;
+      }
+      .code span{ display:inline-block; }
+
+      /* ===============================
+        “본인이 요청한…” 문구
+         (코드박스 하단) ~ (하단 구분선 라인) 사이 정중앙 배치
+         - notice-area가 그 구간 전체를 차지하고
+         - 내부를 flex로 세로 중앙 정렬
+      =============================== */
+      .notice-area{
+        position:absolute;
+        left:40px;
+        right:40px;
+
+        top:calc(var(--codeboxTop) + var(--codeboxH));
+        bottom:var(--bottomH);
+
+        display:flex;
+        align-items:center;   /* 세로 중앙 */
+      }
+
+      .notice{
+        width:100%;
+        color:var(--base1);
+        font-size:20px;
+        font-weight:500;
+        line-height:normal;
+      }
+      .notice .line2{ margin-top:8px; }
+
+      /* 하단 구분 영역(라인+영역) */
+      .bottom{
+        position:absolute;
+        left:0;
+        bottom:0;
+        width:580px;
+        height:72px;
+        border-top:1px solid var(--border);
+        background:var(--white);
+        border-radius:0 0 30px 30px;
+      }
+
+      /* 저작권문구: 하단 24, 좌측 40 */
+      .copyright{
+        position:absolute;
+        left:40px;
+        bottom:24px;
+        color:var(--gray02);
+        font-size:20px;
+        font-weight:500;
+        line-height:normal;
+        white-space:nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="stage" id="stage">
+        <div class="canvas" id="canvas">
+          <!-- 로고 -->
+          <div class="logo" aria-label="Travlocks 로고">
+            <img
+              src="https://raw.githubusercontent.com/dinah05/email-template/9a715697f119f350d8be457c24ad4d3f49349239/assets/travlocks_logo.png"
+              alt="Travlocks"
+            />
+          </div>
+
+          <!-- 타이틀 -->
+          <div class="title-row">
+            <div class="brand">[트래블록스]</div>
+            <div class="title">이메일 인증 코드 안내</div>
+          </div>
+
+          <!-- 안내 문구(좌측 정렬로 변경해서 타이틀과 기준선 맞춤) -->
+          <div class="subtitle">아래의 일회용 인증 코드를 입력해주세요. (유효시간 5분)</div>
+
+          <!-- 인증 코드 박스 -->
+          <div class="codebox" role="group" aria-label="이메일 인증 코드">
+            <!-- 실제 사용 시 아래 6자리만 서버 값으로 치환 -->
+            <div class="code" aria-label="인증 코드">
+              <span>4</span><span>8</span><span>5</span><span>7</span><span>4</span><span>0</span>
+            </div>
+          </div>
+
+          <!-- 안내 문구 영역 -->
+          <div class="notice-area" aria-label="안내 문구 영역">
+            <div class="notice">
+              <div>본인이 요청한 인증이 아니라면</div>
+              <div class="line2">별도의 조치 없이 이 메일을 무시해 주세요.</div>
+            </div>
+          </div>
+
+          <!-- 하단 구분 영역 -->
+          <div class="bottom" aria-hidden="true"></div>
+
+          <!-- 저작권문구 -->
+          <div class="copyright">ⓒ 2026 | Travlocks</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const stage = document.getElementById("stage");
+        const canvas = document.getElementById("canvas");
+        const BASE_W = 580;
+        const BASE_H = 559;
+
+        function layout() {
+          const w = stage.clientWidth;
+          const s = w / BASE_W;              // 폭 기준으로 비율 유지 스케일
+          canvas.style.transform = `scale(${s})`;
+          stage.style.height = (BASE_H * s) + "px";
+        }
+
+        window.addEventListener("resize", layout);
+        window.addEventListener("load", () => {
+          layout();
+          setTimeout(layout, 50);
+          setTimeout(layout, 250);
+        });
+
+        layout();
+      })();
+    </script>
+  </body>
+</html>
