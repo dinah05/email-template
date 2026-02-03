@@ -1,341 +1,124 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>[링큐] 이메일 인증 코드</title>
+</head>
 
-    <title>[링큐] 이메일 인증 코드</title>
+<body style="margin:0; padding:0; background-color:#eef2f7;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#eef2f7;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
 
-    <style>
-      :root{
-        --white:#fff;
-        --black:#000208;
+        <!-- 카드 -->
+        <table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0"
+          style="width:100%; max-width:640px; background-color:#ffffff; border:1px solid #E6E6E6; border-radius:30px; overflow:hidden;">
 
-        --g05:#F7F7F7;
-        --g700:#5F6167;
-        --g600:#87898F;
-        --g02:#989898;
+          <!-- 히어로 영역 -->
+          <tr>
+            <td align="left"
+              style="
+                padding:18px 24px 20px 24px;
+                background-color:#2C6FFF;
+                background-image:linear-gradient(90deg,#2C6FFF 0%,#C800FF 100%);
+              ">
 
-        --b200:#2C6FFF;
-        --b100:#95B6FF;
-        --b50:#E5EDFF;
+              <!-- 로고 -->
+              <img
+                src="https://github.com/dinah05/email-template/blob/main/assets/linku_mail_logo.png?raw=true"
+                alt="Link U"
+                width="50"
+                style="display:block; width:50px; max-width:100%; height:auto; border:0; outline:none; text-decoration:none;"
+              />
 
-        --line:#EFF4FB;
+              <!-- 슬로건 -->
+              <div
+                style="
+                  margin-top:8px;
+                  color:#F7F7F7;
+                  font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+                  font-size:20px;
+                  font-weight:600;
+                  line-height:1.35;
+                ">
+                Link U, Think You
+              </div>
 
-        /* 링큐 메인 그라데이션 */
-        --grad: linear-gradient(90deg,#2C6FFF 0%,#C800FF 100%);
-      }
+            </td>
+          </tr>
 
-      /* 브라우저 기본 여백 제거 + 배경 색 세팅*/
-      html,body{ margin:0; padding:0; background:#eef2f7; }
+          <!-- 본문 패딩 시작 -->
+          <tr>
+            <td style="padding:26px 28px 0 28px; font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
 
-      /* 글꼴 설정(페이퍼로지 폰트 적용이 안대여..없으면 시스템 폰트로 대체)*/
-      body{
-        font-family:"Paperlogy",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",
-          "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-        color:var(--black);
-      }
+              <!-- 제목 -->
+              <div style="font-size:30px; font-weight:700; line-height:1.25; margin:0;">
+                <span style="color:#2C6FFF;">[링큐]</span>
+                <span style="color:#000208;"> 이메일 인증 코드</span>
+              </div>
 
-      /* 이메일 전체 바깥 패딩*/
-      .wrap{ width:100%; padding:24px 12px; box-sizing:border-box; }
+              <!-- 안내 문구 -->
+              <div style="margin-top:12px; color:#5F6167; font-size:18px; font-weight:500; line-height:1.55;">
+                아래의 일회용 코드로 인증을 진행해주세요. (유효시간 5분)
+              </div>
 
-      /* 화면에 보이는 크기를 결정하는 프레임, 내부 디자인 기준은 2700px이나 JS가 자동으로 축소해서 보여줌*/
-      .stage{
-        width:100%;
-        max-width:640px;     /* 전체 크기 조절 */
-        margin:0 auto;
-        position:relative;
-      }
+            </td>
+          </tr>
 
-      /* JS에서 scale()로 줄여서 화면에 맞게 보여줌 */
-      .canvas{
-        width:2700px;
-        height:2790px;
-        border-radius:160px;
-        overflow:hidden;
-        background:var(--white);
-        box-shadow:0 10px 28px rgba(16,24,40,.10);
-        transform-origin: top left; /* 왼쪽 위를 기준으로 축소 */
-        position:relative;
-      }
+          <!-- 코드 박스 -->
+          <tr>
+            <td align="center" style="padding:26px 28px 0 28px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                style="
+                  background-color:#E5EDFF;
+                  border:2px solid #95B6FF;
+                  border-radius:14px;
+                ">
+                <tr>
+                  <td align="center"
+                    style="
+                      padding:26px 16px;
+                      font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+                    ">
+                    <div style="color:#2C6FFF; font-size:52px; font-weight:800; letter-spacing:14px; line-height:1.1;">
+                      485740
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-      /* 상단 그라데이션 영역(히어로영역) */
-      .hero{
-        position:absolute;
-        top:0;
-        left:0;
-        width:2700px;
-        height:520px;
-        background:var(--grad);
-      }
-
-      /* 상단 왼쪽 로고 위치 */
-      .hero-logo{
-        position:absolute;
-        top:131.5px;
-        left:160px;
-        width:200px;
-        height:142px;
-      }
-      .hero-logo svg{ width:100%; height:100%; display:block; }
-
-      /* 로고 아래 “Link U, Think You” 문구 */
-      .hero-tagline{
-        position:absolute;
-        top:319.5px;
-        left:143px;
-        color:var(--g05);
-        font-size:80px;
-        font-weight:600;
-        line-height:150%;
-        white-space:nowrap; /* 줄바꿈 방지 */
-      }
-
-      /* 바디 - 헤드라인 영역 */
-      .headline{
-        position:absolute;
-        top:676px;
-        left:159px;
-        display:flex;
-        align-items:baseline;
-        gap:29px;            /* [링큐]와 제목 사이 간격 */
-        white-space:nowrap;  /* 줄바꿈 방지 */
-      }
-
-      /* [링큐] 텍스트: 글씨ㅣ그라데이션 */
-      .headline .brand{
-        font-size:128px;
-        font-weight:700;
-        line-height:1.1;   /* 글자가 위아래로 잘리는 현상 방지 */
-        background:var(--grad);
-        background-clip:text;
-        -webkit-background-clip:text;
-        -webkit-text-fill-color:transparent;
-        display:inline-block;
-        padding:6px 0;
-      }
-
-      /* 제목 텍스트 */
-      .headline .title{
-        font-size:128px;
-        font-weight:700;
-        line-height:1.1;
-        color:var(--black);
-        display:inline-block;
-        padding:6px 0;
-      }
-
-      /* 안내문구(서브라인): 헤드라인 아래 84px 간격 */
-      .subline{
-        position:absolute;
-        top: calc(676px + 141px + 84px); /* headlineH 근사 */
-        left:159px;
-        color:var(--g700);
-        font-size:100px;
-        font-weight:500;
-        line-height:150%;
-        white-space:nowrap;
-      }
-
-      /* 인증코드 박스: 서브라인 아래 120px 간격 */
-      .codebox{
-        position:absolute;
-        top: calc(676px + 141px + 84px + 150px + 120px);
-        left:159px;
-        width:2380px;
-        height:760px;
-        border-radius:60px;
-        border:4px solid var(--b100);
-        background:var(--b50);
-        box-sizing:border-box;
-      }
-
-      /* 인증코드 숫자 6자리: 숫자끼리의 간격은 80px */
-      .code{
-        position:absolute;
-        top:200px;
-        left:539px;
-        color:var(--b200);
-        font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",
-          "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-        font-size:240px;
-        font-weight:600;
-        line-height:150%;
-        letter-spacing:80px;
-        white-space:nowrap;
-      }
-
-      /* 하단 구분선 + 저작권 문구 */
-      .divider{
-        position:absolute;
-        top:2400px;
-        left:40px;
-        width:2620px;
-        height:10px;
-        background:var(--line);
-      }
-
-      .footer{
-        position:absolute;
-        top: calc(2400px + 10px + 120px);
-        left:160px;
-        color:var(--g02);
-        font-size:90px;
-        font-weight:500;
-        line-height:150%;
-        white-space:nowrap;
-      }
-
-      /* 풋노트: 코드박스 아래와 디바이더 위 사이 공간에서 정확히 가운데에 위치해야함.  그래서 top 값을 JS에서 계산해서 넣음. */
-      .footnote{
-        position:absolute;
-        left:159px;
-        top: 0px;                /* JS에서 최종 결정 */
-        width:2380px;            /* 줄바꿈 안정 */
-        color:var(--g600);
-        font-size:90px;
-        font-weight:500;
-        line-height:150%;
-        white-space:pre-line;    /* 줄바꿈 그대로 반영 */
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <!--
-        stage: 프레임
-        canvas: 실제 원본 디자인(2700x2790)
-      -->
-      <div class="stage" id="stage">
-        <div class="canvas" id="canvas">
-
-          <!-- HERO: 상단 그라데이션 영역 -->
-          <div class="hero">
-            <!-- 로고 SVG (흰색 로고) -->
-            <div class="hero-logo" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" width="200" height="142" viewBox="0 0 200 142" fill="none">
-                <path d="M60.3523 24.3036C76.515 8.92268 100.952 9.24475 116.761 22.8205L81.5849 56.3987C67.4301 69.9104 64.348 91.367 74.126 108.326C76.5488 112.528 79.5532 116.132 82.9663 119.116L71.1151 130.395C51.367 149.188 19.2644 144.539 5.64253 120.914C-4.08587 104.041 -1.00261 82.6911 13.101 69.2695L60.3523 24.3036Z" fill="white"/>
-                <path d="M128.388 11.7232C148.251 -7.23774 180.6 -2.57832 194.322 21.22C204.1 38.1787 201.018 59.6353 186.863 73.147L140.061 117.822C123.704 133.435 98.8829 133.032 82.9663 119.116L118.366 85.4291C132.47 72.0075 135.553 50.6575 125.825 33.7848C123.352 29.4954 120.268 25.8321 116.761 22.8205L128.388 11.7232Z" fill="white"/>
-              </svg>
-            </div>
-
-            <!-- 슬로건 -->
-            <div class="hero-tagline">Link U, Think You</div>
-          </div>
-
-          <!-- BODY CONTENT: 본문 영역m-->
-
-          <!-- 멜 제목 -->
-          <div class="headline">
-            <div class="brand">[링큐]</div>
-            <div class="title">이메일 인증 코드</div>
-          </div>
-
-          <!-- 안내 문구 -->
-          <div class="subline">아래의 일회용 코드로 인증을 진행해주세요. (유효시간 5분)</div>
-
-          <!-- 인증 코드 박스 -->
-          <div class="codebox" id="codebox" role="group" aria-label="이메일 인증 코드">
-            <!-- 6자리 코드 -->
-            <div class="code">485740</div>
-          </div>
-
-          <!-- footnote -->
-          <div class="footnote" id="footnote">
-본 메일을 요청하지 않으셨다면, 이 메일은 무시하셔도 됩니다.
-더 좋은 서비스를 위해 노력하는 링큐가 되겠습니다!
-          </div>
+          <!-- 풋노트 -->
+          <tr>
+            <td style="padding:22px 28px 34px 28px; font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+              <div style="color:#87898F; font-size:16px; font-weight:500; line-height:1.7;">
+                <div>본 메일을 요청하지 않으셨다면, 이 메일은 무시하셔도 됩니다.</div>
+                <div style="margin-top:8px;">더 좋은 서비스를 위해 노력하는 링큐가 되겠습니다!</div>
+              </div>
+            </td>
+          </tr>
 
           <!-- 하단 구분선 -->
-          <div class="divider" id="divider" aria-hidden="true"></div>
+          <tr>
+            <td style="border-top:1px solid #EFF4FB;"></td>
+          </tr>
 
-          <!-- 하단 저작권 -->
-          <div class="footer">ⓒ 2025 | Link U</div>
-        </div>
-      </div>
-    </div>
+          <!-- 카피라이트 -->
+          <tr>
+            <td style="padding:16px 28px 18px 28px; font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+              <div style="color:#989898; font-size:14px; font-weight:600;">
+                ⓒ 2026 | Link U
+              </div>
+            </td>
+          </tr>
 
-    <script>
-      /* 피그마 기준 px 그대로 사용, 화면 크기에 따라 자동으로 줄어듦. */
-      (function () {
-        const stage   = document.getElementById("stage");
-        const canvas  = document.getElementById("canvas");
-        const codebox = document.getElementById("codebox");
-        const divider = document.getElementById("divider");
-        const foot    = document.getElementById("footnote");
+        </table>
+        <!-- /카드 -->
 
-        /* 원본 디자인 기준 크기 */
-        const BASE_W = 2700;
-        const BASE_H = 2790;
-
-        /* 풋노트가 들어갈 영역 정의
-          : 코드박스 아래로 120px 떨어진 곳부터 divider(라인) 위로 130px 떨어진 곳까지
-          이 범위의 “정확한 가운데”에 footnote를 배치
-        */
-        const GAP_BELOW_CODEBOX = 120; // base px
-        const GAP_ABOVE_DIVIDER = 130; // base px
-
-        function layout() {
-          /* 현재 화면의 폭을 기준으로 축소 비율을 계산 */
-          const w = stage.clientWidth;
-          const s = w / BASE_W;
-
-          /* 캔버스를 스케일로 축소해서 화면에 맞춰서 보여줌 */
-          canvas.style.transform = `scale(${s})`;
-          stage.style.height = (BASE_H * s) + "px";
-
-          /* 실제 화면에서 보이는 좌표 측정 */
-          const canvasRect  = canvas.getBoundingClientRect();
-          const codeRect    = codebox.getBoundingClientRect();
-          const dividerRect = divider.getBoundingClientRect();
-          const footRect    = foot.getBoundingClientRect();
-
-          /* 풋노트가 들어갈 영역의 상, 하단 경계 계산
-            - 상단 경계: 코드박스 아래 + 120px
-            - 하단 경계: divider 위 - 130px
-          */
-          const topBoundScaled    = codeRect.bottom + (GAP_BELOW_CODEBOX * s);
-          const bottomBoundScaled = dividerRect.top - (GAP_ABOVE_DIVIDER * s);
-
-          /* 그 영역의 정중앙 Y 좌표 */
-          const midYScaled = (topBoundScaled + bottomBoundScaled) / 2;
-
-          const desiredTopScaled = midYScaled - (footRect.height / 2);
-
-          let desiredTopBase = (desiredTopScaled - canvasRect.top) / s;
-
-          const topBoundBase    = (topBoundScaled - canvasRect.top) / s;
-          const bottomBoundBase = (bottomBoundScaled - canvasRect.top) / s;
-          const footHBase       = footRect.height / s;
-
-          const minTop = topBoundBase;
-          const maxTop = bottomBoundBase - footHBase;
-
-          /* 영역이 너무 좁아서 중앙 배치가 불가능한 경우 최대한 겹치지 않게.. */
-          if (maxTop < minTop) {
-            desiredTopBase = Math.max(0, bottomBoundBase - footHBase);
-          } else {
-            desiredTopBase = Math.max(minTop, Math.min(desiredTopBase, maxTop));
-          }
-
-          /* 최종적으로 footnote 위치를 적용 */
-          foot.style.top = desiredTopBase + "px";
-        }
-
-        window.addEventListener("resize", layout);
-
-        /* 폰트가 늦게 로딩되면 글자 높이가 달라질 수 있어서, 로딩 직후 + 약간의 시간차를 두고 여러 번 보정 */
-        window.addEventListener("load", () => {
-          layout();
-          setTimeout(layout, 50);
-          setTimeout(layout, 250);
-          setTimeout(layout, 600);
-        });
-
-        /* 최초 1회 실행 */
-        layout();
-      })();
-    </script>
-  </body>
+      </td>
+    </tr>
+  </table>
+</body>
 </html>
